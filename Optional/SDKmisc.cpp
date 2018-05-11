@@ -167,7 +167,7 @@ INT_PTR CALLBACK DisplaySwitchToREFWarningProc( HWND hDlg, UINT message, WPARAM 
             SendMessage( GetDlgItem( hDlg, 0x100 ), STM_SETIMAGE, IMAGE_ICON, ( LPARAM )LoadIcon( 0, IDI_QUESTION ) );
             WCHAR sz[512];
             swprintf_s( sz, 512,
-                             L"This program needs to use the Direct3D %Iu reference device.  This device implements the entire Direct3D %Iu feature set, but runs very slowly.  Do you wish to continue?", lParam, lParam );
+                             L"This program needs to use the Direct3D %zu reference device.  This device implements the entire Direct3D %zu feature set, but runs very slowly.  Do you wish to continue?", lParam, lParam );
             SetDlgItemText( hDlg, 0x101, sz );
             SetDlgItemText( hDlg, IDYES, L"&Yes" );
             SetDlgItemText( hDlg, IDNO, L"&No" );
@@ -904,12 +904,15 @@ HRESULT CDXUTResourceCache::OnDestroyDevice()
 //======================================================================================
 
 _Use_decl_annotations_
-CDXUTTextHelper::CDXUTTextHelper( ID3D11Device* pd3d11Device, ID3D11DeviceContext* pd3d11DeviceContext, CDXUTDialogResourceManager* pManager, int nLineHeight )
+CDXUTTextHelper::CDXUTTextHelper( ID3D11Device* pd3d11Device, ID3D11DeviceContext* pd3d11DeviceContext, CDXUTDialogResourceManager* pManager, int nLineHeight ) :
+    m_clr(0, 0, 0, 0),
+    m_pt{ 0, 0 },
+    m_nLineHeight{},
+    m_pd3d11Device(pd3d11Device),
+    m_pd3d11DeviceContext(pd3d11DeviceContext),
+    m_pManager(pManager)
 {
     Init( nLineHeight );
-    m_pd3d11Device = pd3d11Device;
-    m_pd3d11DeviceContext = pd3d11DeviceContext;
-    m_pManager = pManager;
 }
 
 CDXUTTextHelper::~CDXUTTextHelper()
